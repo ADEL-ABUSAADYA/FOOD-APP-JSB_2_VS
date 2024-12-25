@@ -24,7 +24,7 @@ namespace FOOD_APP_JSB_2.Filters
         {
             var claims = context.HttpContext.User;
              
-            var userID = claims.FindFirst(ClaimTypes.NameIdentifier);
+            var userID = claims.FindFirst("ID");
 
             if (userID is null || string.IsNullOrEmpty(userID.Value))
             {

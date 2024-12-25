@@ -5,9 +5,9 @@ using MediatR;
 
 namespace FOOD_APP_JSB_2.CQRS.Recipes.Commands;
 
-public record RegisterUserCommand(string name) : IRequest<bool>;
+public record AddRecipeCommand(string name) : IRequest<bool>;
 
-public class AddRecipeCommandHandler : IRequestHandler<RegisterUserCommand, bool>
+public class AddRecipeCommandHandler : IRequestHandler<AddRecipeCommand, bool>
 {
     IRepository<Recipe> _repository;
     public AddRecipeCommandHandler(IRepository<Recipe> repository)
@@ -15,7 +15,7 @@ public class AddRecipeCommandHandler : IRequestHandler<RegisterUserCommand, bool
         _repository = repository;
     }
 
-    public Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public Task<bool> Handle(AddRecipeCommand request, CancellationToken cancellationToken)
     {
         _repository.Add(new Recipe { Name = request.name});
         _repository.SaveChanges();

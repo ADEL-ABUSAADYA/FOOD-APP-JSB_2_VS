@@ -6,9 +6,9 @@ using MediatR;
 
 namespace FOOD_APP_JSB_2.CQRS.Recipes.Queries;
 
-public record GetUserByIDQuery (int ID) : IRequest<UsserViewModel>;
+public record GetRecipeByIDQuery(int ID) : IRequest<RecipeViewModel>;
 
-public class GetRecipeByIDQueryHandler : IRequestHandler<GetUserByIDQuery, UsserViewModel>
+public class GetRecipeByIDQueryHandler : IRequestHandler<GetRecipeByIDQuery, RecipeViewModel>
 {
     IRepository<Recipe> _repository;
     IMediator _mediator;
@@ -18,11 +18,11 @@ public class GetRecipeByIDQueryHandler : IRequestHandler<GetUserByIDQuery, Usser
         _mediator = mediator;
     }
 
-    public async Task<UsserViewModel> Handle(GetUserByIDQuery request, CancellationToken cancellationToken)
+    public async Task<RecipeViewModel> Handle(GetRecipeByIDQuery request, CancellationToken cancellationToken)
     {
         // var exams = _mediator.Send(new GetExamsByInstructorIDQuery(request.ID));
 
         return (await _repository.GetByIDAsync(request.ID))
-            .Map<UsserViewModel>();
+            .Map<RecipeViewModel>();
     }
 }

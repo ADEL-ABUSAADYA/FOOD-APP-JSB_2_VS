@@ -6,23 +6,24 @@ using MediatR;
 
 namespace FOOD_APP_JSB_2.CQRS.Users.Queries;
 
-public record GetUserByUserIDQuery (int ID) : IRequest<UserViewModel>;
+public record GetUserByIDQuery (int ID) : IRequest<UserViewModel>;
 
-public class GetUserByIDQueryHandler : IRequestHandler<GetUserByUserIDQuery, UserViewModel>
+public class GetUserByIDQueryHandler : IRequestHandler<GetUserByIDQuery, UserViewModel>
 {
-    IRepository<Recipe> _repository;
+    IRepository<User> _repository;
     IMediator _mediator;
-    public GetUserByIDQueryHandler(IMediator mediator, IRepository<Recipe> repository)
+    public GetUserByIDQueryHandler(IMediator mediator, IRepository<User> repository)
     {
         _repository = repository;
         _mediator = mediator;
     }
 
-    public async Task<UserViewModel> Handle(GetUserByUserIDQuery request, CancellationToken cancellationToken)
+    public async Task<UserViewModel> Handle(GetUserByIDQuery request, CancellationToken cancellationToken)
     {
         // var exams = _mediator.Send(new GetExamsByInstructorIDQuery(request.ID));
 
-        return (await _repository.GetByIDAsync(request.ID))
+        var result= (await _repository.GetByIDAsync(request.ID))
             .Map<UserViewModel>();
+        return result;
     }
 }

@@ -18,7 +18,7 @@ namespace FOOD_APP_JSB_2.Helpers
             _configuration = configuration;
         }
 
-        public string GenerateToken(int userID, string name, Role role)
+        public string GenerateToken(int userID)
         {
             var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:SecretKey"]);
             var issuer = _configuration["JwtSettings:Issuer"];
@@ -31,7 +31,6 @@ namespace FOOD_APP_JSB_2.Helpers
                 Subject = new ClaimsIdentity(new[]
                 {
                 new Claim("ID", userID.ToString()),
-                new Claim(ClaimTypes.Role, ((int)role).ToString())
             }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 Issuer = issuer,

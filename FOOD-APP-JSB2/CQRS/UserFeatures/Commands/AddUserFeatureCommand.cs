@@ -5,17 +5,17 @@ using MediatR;
 
 namespace FOOD_APP_JSB_2.CQRS.UserFeatures.Commands;
 
-public record RegisterUserCommand(string name) : IRequest<bool>;
+public record AddUserFeatureCommand(string name) : IRequest<bool>;
 
-public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, bool>
+public class AddUserFeatureCommandHandler : IRequestHandler<AddUserFeatureCommand, bool>
 {
     IRepository<Recipe> _repository;
-    public RegisterUserCommandHandler(IRepository<Recipe> repository)
+    public AddUserFeatureCommandHandler(IRepository<Recipe> repository)
     {
         _repository = repository;
     }
 
-    public Task<bool> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public Task<bool> Handle(AddUserFeatureCommand request, CancellationToken cancellationToken)
     {
         _repository.Add(new Recipe { Name = request.name});
         _repository.SaveChanges();

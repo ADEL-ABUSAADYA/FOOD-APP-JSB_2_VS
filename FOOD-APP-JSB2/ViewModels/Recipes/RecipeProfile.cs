@@ -8,7 +8,7 @@ public class UserProfile: Profile
 {
     public UserProfile()
     {
-        CreateMap<Recipe, UsserViewModel>().ReverseMap();
-        CreateMap<RegisterUserCommand, UsserViewModel>().ReverseMap();
+        CreateMap<Recipe, RecipeViewModel>().ReverseMap();
+        
     }
 }

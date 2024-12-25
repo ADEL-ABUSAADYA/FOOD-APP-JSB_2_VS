@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace FOOD_APP_JSB_2.CQRS.Recipes;
+namespace FOOD_APP_JSB_2.CQRS.users;
 
-public record RecipeRemoved(int ID) : INotification;
-public record RecipeAdedd(int ID) : INotification;
+public record UserRemoved(int ID) : INotification;
+public record UserAdedd(int ID) : INotification;

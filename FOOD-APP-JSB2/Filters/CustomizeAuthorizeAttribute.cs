@@ -34,7 +34,7 @@ namespace FOOD_APP_JSB_2.Filters
             var user = int.Parse(userID.Value);
 
 
-            var hasAccess = _mediator.Send(new HasAccessQuery(user, _feature));
+            var hasAccess = _mediator.Send(new HasAccessQuery(user, _feature)).GetAwaiter().GetResult();
 
             if (!hasAccess)
             {

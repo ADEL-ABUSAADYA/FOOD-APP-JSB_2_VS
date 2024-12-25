@@ -1,4 +1,5 @@
 using FOOD_APP_JSB_2.AutoMapper;
+using FOOD_APP_JSB_2.Data.Enums;
 using FOOD_APP_JSB_2.Data.Repositories;
 using FOOD_APP_JSB_2.Models;
 using FOOD_APP_JSB_2.ViewModels.Recipes;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace FOOD_APP_JSB_2.CQRS.UserFeatures.Queries;
 
-public record HasAccessQuery (int ID, ) : IRequest<bool>;
+public record HasAccessQuery(int ID, Feature Featuer) : IRequest<bool>;
 
 public class HasAccessQueryHandler : IRequestHandler<HasAccessQuery, bool>
 {
@@ -20,11 +21,11 @@ public class HasAccessQueryHandler : IRequestHandler<HasAccessQuery, bool>
 
     public async Task<bool> Handle(HasAccessQuery request, CancellationToken cancellationToken)
     {
-        // var exams = _mediator.Send(new GetExamsByInstructorIDQuery(request.ID));
+        var hasFeature = await _repository.AnyAsync(
+             uf => uf.UserID == request.ID && uf.Feature == request.Featuer);
 
-        return (await _repository.GetByIDAsync(request.ID))
-            .Map<UsserViewModel>();
+        return hasFeature;
     }
 
- 
+
 }

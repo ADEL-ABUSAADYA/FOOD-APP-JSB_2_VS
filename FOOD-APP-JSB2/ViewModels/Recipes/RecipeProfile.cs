@@ -4,11 +4,11 @@ using FOOD_APP_JSB_2.Models;
 
 namespace FOOD_APP_JSB_2.ViewModels.Recipes;
 
-public class RecipeProfile: Profile
+public class UserProfile: Profile
 {
-    public RecipeProfile()
+    public UserProfile()
     {
-        CreateMap<Recipe, RecipeViewModel>().ReverseMap();
-        CreateMap<AddRecipeCommand, RecipeViewModel>().ReverseMap();
+        CreateMap<Recipe, UsserViewModel>().ReverseMap();
+        CreateMap<RegisterUserCommand, UsserViewModel>().ReverseMap();
     }
 }

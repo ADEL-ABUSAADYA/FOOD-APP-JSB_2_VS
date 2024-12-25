@@ -10,7 +10,7 @@ public class Context : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Server=localhost,1433;Database=ExamSystemDB1;User Id=SA;Password=StrongP@ssw0rd;Encrypt=False;")
+        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=FOOD-CQRS;Trusted_Connection=True;MultipleActiveResultSets=true")
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
             .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
             .EnableSensitiveDataLogging();

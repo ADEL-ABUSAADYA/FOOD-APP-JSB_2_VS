@@ -10,5 +10,6 @@ public class UserProfile: Profile
     {
         CreateMap<User, UserViewModel>().ReverseMap();
         CreateMap<RegisterUserCommand, UserViewModel>().ReverseMap();
+        CreateMap<RegisterUserCommand, RegisterViewModel>().ReverseMap();
     }
 }

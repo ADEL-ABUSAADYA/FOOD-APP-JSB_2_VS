@@ -30,7 +30,7 @@ public class UserController : ControllerBase
     [HttpPost]
     [Authorize]
     [TypeFilter(typeof(CustomRequestCultureProvider), Arguments = new object[] { Feature.Create })]
-    public async Task<bool>  Create(UserViewModel viewModel)
+    public async Task<bool> Create(UserViewModel viewModel)
     {
         var user = viewModel.Map<RegisterUserCommand>();
         var isAdded = await _mediator.Send(user);
@@ -55,4 +55,5 @@ public class UserController : ControllerBase
 
         return _tokenHelper.GenerateToken(2);
     }
+    
 }

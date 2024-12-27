@@ -39,8 +39,6 @@ public class Repository<Entity> : IRepository<Entity> where Entity : BaseModel
        var entity = await _dbSet.Where(x => x.ID == id).FirstOrDefaultAsync();
        return entity;
     }
-
-
     public void SaveChanges()
     {
         _context.SaveChanges();

@@ -29,8 +29,8 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    [TypeFilter(typeof(CustomRequestCultureProvider), Arguments = new object[] { Feature.Create })]
-    public async Task<bool> Create(UserViewModel viewModel)
+    [TypeFilter(typeof(CustomRequestCultureProvider), Arguments = new object[] { Feature.Register })]
+    public async Task<bool> Register(UserViewModel viewModel)
     {
         var user = viewModel.Map<RegisterUserCommand>();
         var isAdded = await _mediator.Send(user);
@@ -48,12 +48,21 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public string Login(int userID, string password)
+    public async Task<string> Login(LoginViewModel viewModel)
     {
-        // check valid username and password
-        // return temp Token
 
-        return _tokenHelper.GenerateToken(2);
+        var user = viewModel.Map<UserLogInQuery>();
+        var userData = await _mediator.Send(user);
+
+        if (userData.ID != 0 && !userData.TwoFactorAuth)
+        {
+            return _tokenHelper.GenerateToken(userData.ID);
+        }
+        if (userData.ID != 0 && userData.TwoFactorAuth)
+        {
+            return _tokenHelper.GenerateToken(userData.ID);
+        }
+        return _tokenHelper.GenerateToken(userData.ID);
     }
-    
+
 }

@@ -2,7 +2,7 @@
 {
     public enum Feature
     {
-        Create = 0,
+        Register = 0,
         GetByID = 1
     }
 }

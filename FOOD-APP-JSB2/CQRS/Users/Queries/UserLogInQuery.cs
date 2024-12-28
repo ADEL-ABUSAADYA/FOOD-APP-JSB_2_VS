@@ -6,9 +6,9 @@ using MediatR;
 
 namespace FOOD_APP_JSB_2.CQRS.Users.Queries;
 
-public record UserLogInQuery(string email, string password) : IRequest<(int ID, bool TwoFactorAuth)>;
+public record UserLogInQuery(string email, string password) : IRequest<(int, bool)>;
 
-public class UserLogInQueryHandler : IRequestHandler<UserLogInQuery, (int ID, bool TwoFactorAuth)>
+public class UserLogInQueryHandler : IRequestHandler<UserLogInQuery, (int, bool)>
 {
     IUserRepository _repository;
 
@@ -17,7 +17,7 @@ public class UserLogInQueryHandler : IRequestHandler<UserLogInQuery, (int ID, bo
         _repository = repository;
     }
 
-    public async Task<(int ID, bool TwoFactorAuth)> Handle(UserLogInQuery request, CancellationToken cancellationToken)
+    public async Task<(int, bool)> Handle(UserLogInQuery request, CancellationToken cancellationToken)
     {
         var userData = await _repository.LogInUser(request.email, request.password);
         

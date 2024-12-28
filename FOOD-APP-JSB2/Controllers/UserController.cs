@@ -4,11 +4,13 @@ using FOOD_APP_JSB_2.CQRS.Users.Queries;
 using FOOD_APP_JSB_2.Data.Enums;
 using FOOD_APP_JSB_2.Filters;
 using FOOD_APP_JSB_2.Helpers;
+using FOOD_APP_JSB_2.ViewModels.Responses;
 using FOOD_APP_JSB_2.ViewModels.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using OtpNet;
 
 
 namespace FOOD_APP_JSB_2.Controllers;
@@ -48,21 +50,52 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<string> Login(LoginViewModel viewModel)
+    public async Task<ResponseViewModel<UserLoginResult>> Login(LoginViewModel viewModel)
     {
-
         var user = viewModel.Map<UserLogInQuery>();
         var userData = await _mediator.Send(user);
-
-        if (userData.ID != 0 && !userData.TwoFactorAuth)
+        UserLoginResult result = new UserLoginResult { Token = null, TwofactorAuthEnabled = userData.Item2 };
+        if (userData.Item1 != 0 && !userData.Item2)
         {
-            return _tokenHelper.GenerateToken(userData.ID);
+            var token = _tokenHelper.GenerateToken(userData.Item1);
+            result.Token = token;
+            return new SuccessResponseViewModel<UserLoginResult>(result);
         }
-        if (userData.ID != 0 && userData.TwoFactorAuth)
+        if (userData.Item1 != 0 && userData.Item2)
         {
-            return _tokenHelper.GenerateToken(userData.ID);
+            return new SuccessResponseViewModel<UserLoginResult>(result);
         }
-        return _tokenHelper.GenerateToken(userData.ID);
+        return new FaluireResponseViewModel<UserLoginResult>(ErrorCode.UserNotFound, ErrorCode.UserNotFound.ToString());
     }
 
+    [HttpGet]
+    public string GetLink()
+    {
+        var secretKey = KeyGeneration.GenerateRandomKey(20);
+        var base32Key = Base32Encoding.ToString(secretKey);
+
+        var appName = "UpSkilling-FoodApp-JSB2";
+        var userName = "Adel";
+
+        string otpUrl = $"otpauth://totp/{appName}:{userName}?secret={base32Key}&issuer={appName}";
+
+        return otpUrl;
+    }
+
+    [HttpPost]
+    public bool VerifyOTP(string tempToken, string otp)
+    {
+        var secretKey = "5WM6M5A3NZ65RTKQEPKWUIGEO6DCUSD2"; // get the secret key for the specific user
+        var key = Base32Encoding.ToBytes(secretKey);
+        var totp = new Totp(key);
+
+        var isValid = totp.VerifyTotp(otp, out long timeStepMatched);
+
+        if (isValid)
+        {
+            //return TokenHelper.GenerateToken(10, "Ali", Role.Instructor);
+        }
+
+        return isValid;
+    }
 }

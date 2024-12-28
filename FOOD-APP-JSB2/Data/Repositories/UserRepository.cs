@@ -13,15 +13,20 @@ namespace FOOD_APP_JSB_2.Data.Repositories
             _context = context;
         }
 
-        public async Task<(int ID, bool TwoFactorAuth)> LogInUser(string email, string password)
+        public async Task<(int, bool)> LogInUser(string email, string password)
         {
             var user = await _context.Users
             .AsNoTracking()
             .Where(u => u.Email == email && u.Password == password) 
-            .Select(u => new { u.ID, u.TwoFactorAuth })
+            .Select(u => new { u.ID, u.TwoFactorAuthEnabled })
             .FirstOrDefaultAsync();
 
-            return (user.ID, user.TwoFactorAuth);
+            if (user == null)
+            {
+                return (0, false);
+            }
+
+            return (user.ID, user.TwoFactorAuthEnabled);
         }
     }
 }
